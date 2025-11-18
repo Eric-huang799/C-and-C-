@@ -1,0 +1,28 @@
+在iomanip里，可以用：
+1.setw（n）控制宽度，控制输出字段宽度为n
+2.left right internal是用来设置左对齐、右对齐、符号位左对齐数值位右对齐
+3.setfill（c）用来设置填充字符为c
+4.setprecision（n）设置浮点数精度为n位
+5.dec hex oct设置为十进制、十六进制、八进制输出
+6.boolalpha使布尔值输出为 true/false而非1/0
+7.showpos noshowpos强制显示正号/不显示
+8.scientific fixed控制输出浮点数格式
+
+例如：
+#include<iostream>
+#include<iomanip>
+
+int main（） {
+双圆周率 = 3.1415926535;
+
+cout << fixed <<setprecision(2) << pi << endl;
+// 输出：3.14
+
+cout << setw(10) <<setfill('*') << right << 42 << endl;
+// 输出：********42
+
+cout << hex << showbase << 255 << endl;
+// 输出：0xff
+
+return 0;
+}
