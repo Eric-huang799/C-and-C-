@@ -1,0 +1,173 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Contact {
+	char name[100];
+	char phone[100];
+	char address[100];
+	char email[100];
+	int group; 
+	struct Contact* next;
+} Contact;
+
+Contact* head = NULL;
+
+const char* group_names[] = {"亲人", "同事", "朋友", "其它"};
+
+void add_contact() {
+	Contact* new_node = (Contact*)malloc(sizeof(Contact));
+	printf("请输入姓名: ");
+	scanf(" %[^\n]", new_node->name);
+	printf("请输入电话: ");
+	scanf(" %[^\n]", new_node->phone);
+	printf("请输入地址: ");
+	scanf(" %[^\n]", new_node->address);
+	printf("请输入邮箱: ");
+	scanf(" %[^\n]", new_node->email);
+	printf("选择分组: 1.亲人 2.同事 3.朋友 4.其它: ");
+	int c;
+	scanf("%d", &c);
+	if((c>4)||(c<1))
+		printf("错误，请重新输入！");
+	
+	else{new_node->group=c;
+		new_node->next = head;
+		head = new_node;
+		printf("联系人已添加。\n");
+	}
+		
+}
+
+void print_group(int group) {
+	Contact* p = head;
+	int a = 0;
+	while (p) {
+		if (p->group == group) {
+			printf("姓名: %s, 电话: %s, 地址: %s, 邮箱: %s, 关系: %s\n",p->name, p->phone, p->address, p->email, group_names[p->group]);
+			a = 1;
+		}
+		p = p->next;
+	}
+	if (!a) printf("无\n");
+}
+
+void list_all() {
+	for (int i = 1; i <= 4; i++) {
+		printf("\n【%s】:\n", group_names[i]);
+		print_group(i);
+	}
+}
+
+Contact* search_by(int mode, char* key) {
+	Contact* p = head;
+	while (p) {
+		if ((mode == 1 && strcmp(p->name, key) == 0) ||
+			(mode == 2 && strcmp(p->phone, key) == 0) ||
+			(mode == 3 && strcmp(p->email, key) == 0))
+			return p;
+		p = p->next;
+	}
+	return NULL;
+}
+
+void search_contact() {
+	int mode;
+	char key[100];
+	printf("选择检索方式: 1.姓名 2.电话 3.邮箱: ");
+	scanf("%d", &mode);
+	if ((mode!=1)||(mode!=2)||(mode!=3)){
+		printf("出错了！！！请检查输入选项哟！");
+		search_contact();//.
+	}
+	printf("请输入关键词: ");
+	scanf(" %[^\n]", key);
+	Contact* research = search_by(mode, key);
+	if (research) {
+		printf("找到联系人:\n");
+		printf("姓名: %s, 电话: %s, 地址: %s, 邮箱: %s, 关系: %s\n",
+			   research->name, research->phone, research->address, research->email, group_names[research->group]);
+	} else {
+		printf("未找到联系人。请确定输入是否正确。\n");
+	}
+}
+
+void modify_contact() {
+	int mode;
+	char key[100];
+	printf("选择检索方式: 1.姓名 2.电话 3.邮箱: ");
+	scanf("%d", &mode);
+	printf("请输入关键词: ");
+	scanf(" %[^\n]", key);
+	Contact* research = search_by(mode, key);
+	if (research) {
+		printf("已找到联系人，请输入新信息:\n");
+		printf("姓名: ");
+		scanf(" %[^\n]", research->name);
+		printf("电话: ");
+		scanf(" %[^\n]", research->phone);
+		printf("地址: ");
+		scanf(" %[^\n]", research->address);
+		printf("邮箱: ");
+		scanf(" %[^\n]", research->email);
+		printf("分组: 1.亲人 2.同事 3.朋友 4.其它: ");
+		scanf("%d", &research->group);
+		printf("您已修改完成。\n");
+	} else {
+		printf("未找到联系人。\n");
+	}
+}
+
+void delete_contact() {
+	int mode;
+	char key[100];
+	printf("选择检索方式: 1.姓名 2.电话 3.邮箱: ");
+	scanf("%d", &mode);
+	printf("请输入关键词: ");
+	scanf(" %[^\n]", key);
+	Contact* search = NULL;
+	Contact* p = head;
+	while (p) {
+		if ((mode == 1 && strcmp(p->name, key) == 0) ||
+			(mode == 2 && strcmp(p->phone, key) == 0) ||
+			(mode == 3 && strcmp(p->email, key) == 0)) {
+			if (search) search->next = p->next;
+			else head = p->next;
+			free(p);
+			printf("联系人已删除。\n");
+			return;
+		}
+		search = p;
+		p = p->next;
+	}
+	printf("未找到联系人。请确定输入是否正确。\n");
+}
+
+int main() {
+	int choice;
+	printf("\n=== 欢迎使用通讯录管理系统 ===\n");
+	printf("*****作者：计机255黄乙宸*****\n");
+	printf("*****学号：2025307070521*****\n");
+	while (1) {
+		printf("*********************************\n");
+		printf("1. 添加联系人\n");
+		printf("2. 输出通讯录\n");
+		printf("3. 检索联系人\n");
+		printf("4. 修改联系人\n");
+		printf("5. 删除联系人\n");
+		printf("按0或其它任意字母退出系统\n");
+		printf("*********************************\n");
+		printf("请选择: ");
+		scanf("%d", &choice);
+		switch (choice) {
+			case 1: add_contact(); break;
+			case 2: list_all(); break;
+			case 3: search_contact(); break;
+			case 4: modify_contact(); break;
+			case 5: delete_contact(); break;
+			case 0: printf("已退出系统。\n"); return 0;
+			default: printf("无效选择。请输入正确选择。\n");
+		}
+	}
+	return 0;
+}
