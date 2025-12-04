@@ -13,7 +13,7 @@ typedef struct Contact {
 
 Contact* head = NULL;
 
-const char* group_names[] = {"亲人", "同事", "朋友", "其它"};
+const char* group_names[] = {"","亲人", "同事", "朋友", "其它"};
 
 void add_contact() {
 	Contact* new_node = (Contact*)malloc(sizeof(Contact));
