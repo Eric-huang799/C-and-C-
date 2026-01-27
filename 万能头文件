@@ -1,20 +1,3 @@
 万能头文件：
 #include<bits/stdc++.h>
 里面包含了iomanip,cmath,map,string,vector,set,stack,iostream等头文件，适合竞赛用
-# 创建目录
-mkdir -p ~/lab/dvwa && cd ~/lab/dvwa
-
-# 创建docker-compose.yml
-cat > docker-compose.yml << 'EOF'
-version: '3'
-services:
-  dvwa:
-    image: vulnerables/web-dvwa
-    ports:
-      - "8080:80"
-    environment:
-      - MYSQL_PASS=password
-EOF
-
-# 启动
-docker-compose up -d
